@@ -1,11 +1,12 @@
 import React from 'react';
+import logoSvg from '/public/Logo.svg';
 
 export default function Header() {
   return (
     <header className="app-header">
       <div className="header-brand">
         <img 
-          src="/Logo.svg" 
+          src={logoSvg} 
           alt="Logo CarbuPrix" 
           className="header-logo" 
         />

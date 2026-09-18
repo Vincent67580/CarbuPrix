@@ -7,6 +7,14 @@ import { getStationName } from '../utils/getStationName';
 import MapRecenter from './MapRecenter';
 import { FUEL_MAP } from '../constants/fuelMap';
 
+// Fixe l'affichage des marqueurs pour la production / GitHub Pages
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
+  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+});
+
 export default function MapView({ center, stations }) {
   const [isMapVisible, setIsMapVisible] = useState(true);
 
@@ -45,7 +53,6 @@ export default function MapView({ center, stations }) {
                 .map((fuelId) => {
                   const fuelConfig = FUEL_MAP[fuelId];
                   const rawPrice = station[fuelConfig.priceKey];
-                  
 
                   if (rawPrice != null && !isNaN(Number(rawPrice))) {
                     return {
