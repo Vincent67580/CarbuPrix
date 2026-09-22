@@ -1,13 +1,30 @@
 import React from 'react';
 import { getStationName } from '../utils/getStationName';
 import { getFuelData } from '../utils/fuelHelpers';
+import { getDistanceInKm } from '../utils/getDistance';
+import { getNavigationUrl } from '../utils/navigationUtils';
 
-export default function StationCard({ station, activeSortFuel }) {
+export default function StationCard({ station, activeSortFuel, center }) {
   if (!station) return null;
+  
   const stationTitle = getStationName(station);
   const { available, tempOutOfStock, defOutOfStock } = getFuelData(station);
 
-  const fullAddress = `${station.adresse || ''}${station.cp || station.ville ? `, ${station.cp || ''} ${station.ville || ''}` : ''}`;
+  const fullAddress = `${station.adresse || ''}${station.cp || station.ville ? `, ${station.cp || ''}${station.ville || ''}` : ''}`;
+
+  // Récupération des coordonnées pour la distance et le GPS
+  // L'API OpenData retourne souvent [latitude, longitude] dans `geom`
+  const lat = station.geom?.[0] || station.latitude;
+  const lon = station.geom?.[1] || station.longitude;
+
+  // Calcul de la distance
+  const distanceText =
+    center && lat && lon
+      ? getDistanceInKm(center[0], center[1], lat, lon)
+      : null;
+
+  // URL du GPS
+  const navUrl = lat && lon ? getNavigationUrl(lat, lon) : null;
 
   return (
     <div className="station-card">
@@ -15,6 +32,24 @@ export default function StationCard({ station, activeSortFuel }) {
         <div className="station-title">
           <h2>{stationTitle}</h2>
           <span className="station-address">{fullAddress}</span>
+        </div>
+
+        <div className="station-actions">
+          {distanceText && (
+            <span className="station-distance">📍 {distanceText}</span>
+          )}
+
+          {navUrl && (
+            <a
+              href={navUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-navigation"
+              title="Ouvrir l'itinéraire GPS"
+            >
+              🚗 Y aller
+            </a>
+          )}
         </div>
       </div>
 

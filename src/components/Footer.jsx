@@ -12,7 +12,7 @@ function Footer() {
           <li>
             Prix & Ruptures :{' '}
             <a
-              href="https://www.data.gouv.fr/fr/datasets/prix-des-carburants-en-france-flux-instantane-v2/"
+              href="https://data.economie.gouv.fr/explore/dataset/prix-des-carburants-en-france-flux-instantane-v2/information/"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -66,7 +66,7 @@ function Footer() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Vincent67580
+            Vincent B.
           </a>
         </p>
       </div>

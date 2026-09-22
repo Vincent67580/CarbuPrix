@@ -4,15 +4,31 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
 import { getStationName } from '../utils/getStationName';
+import { getDistanceInKm } from '../utils/getDistance';
 import MapRecenter from './MapRecenter';
 import { FUEL_MAP } from '../constants/fuelMap';
 
-// Fixe l'affichage des marqueurs pour la production / GitHub Pages
+// Fixe l'affichage des marqueurs par défaut pour la production / GitHub Pages
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
   iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+});
+
+// Icône personnalisée pour le point de recherche / position actuelle
+const userLocationIcon = L.divIcon({
+  className: 'custom-user-pin',
+  html: `<div style="
+    background-color: #ef4444;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 3px solid white;
+    box-shadow: 0 0 8px rgba(0,0,0,0.4);
+  "></div>`,
+  iconSize: [24, 24],
+  iconAnchor: [12, 12],
 });
 
 export default function MapView({ center, stations }) {
@@ -35,12 +51,22 @@ export default function MapView({ center, stations }) {
             scrollWheelZoom={false}
             className="leaflet-map"
           >
-            <MapRecenter center={center} />
+            <MapRecenter center={center} stations={stations} />
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
 
+            {/* Marqueur représentant la position de recherche ou de l'utilisateur */}
+            {center && center.length === 2 && (
+              <Marker position={center} icon={userLocationIcon}>
+                <Popup>
+                  <strong>📍 Votre position / Point de recherche</strong>
+                </Popup>
+              </Marker>
+            )}
+
+            {/* Marqueurs des stations */}
             {stations.map((station) => {
               if (!station.geom) return null;
               const [lat, lon] = station.geom;
@@ -48,7 +74,10 @@ export default function MapView({ center, stations }) {
               const fullAddress = `${station.adresse || ''}${station.cp || station.ville ? `, ${station.cp || ''} ${station.ville || ''}` : ''}`;
 
 
-              // Extraction des prix à partir du FUEL_MAP commun
+              const distanceText = center
+                ? getDistanceInKm(center[0], center[1], lat, lon)
+                : null;
+
               const fuelEntries = Object.keys(FUEL_MAP)
                 .map((fuelId) => {
                   const fuelConfig = FUEL_MAP[fuelId];
@@ -69,6 +98,9 @@ export default function MapView({ center, stations }) {
                   <Popup>
                     <div className="map-popup">
                       <strong>{stationTitle}</strong>
+                      {distanceText && (
+                        <p className="popup-distance">📍 À {distanceText}</p>
+                      )}
                       <p>{fullAddress}</p>
                       <hr />
                       {fuelEntries.length > 0 ? (

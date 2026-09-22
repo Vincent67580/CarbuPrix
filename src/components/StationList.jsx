@@ -1,7 +1,7 @@
 import React from 'react';
 import StationCard from './StationCard';
 
-export default function StationList({ stations, activeSortFuel }) {
+export default function StationList({ stations, activeSortFuel, center }) {
   if (!Array.isArray(stations) || stations.length === 0) {
     return <p className="status-message">Aucune station disponible.</p>;
   }
@@ -13,6 +13,7 @@ export default function StationList({ stations, activeSortFuel }) {
           key={station.id || index}
           station={station}
           activeSortFuel={activeSortFuel}
+          center={center}
         />
       ))}
     </main>

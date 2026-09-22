@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { searchCities } from '../api/addressApi';
 
 export default function SearchBar({ onSelectCity, onUseGeolocation }) {
   const [query, setQuery] = useState('');
@@ -8,26 +9,18 @@ export default function SearchBar({ onSelectCity, onUseGeolocation }) {
   useEffect(() => {
     if (query.trim().length < 2) {
       setSuggestions([]);
+      setIsOpen(false);
       return;
     }
 
     const timer = setTimeout(async () => {
       try {
-        const response = await fetch(
-          `https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(query)}&type=municipality&limit=5`
-        );
-        const data = await response.json();
-        
-        const cities = data.features.map((item) => ({
-          nom: item.properties.label,
-          codePostal: item.properties.postcode,
-          coordinates: item.geometry.coordinates, // [longitude, latitude]
-        }));
-
+        const cities = await searchCities(query);
         setSuggestions(cities);
-        setIsOpen(true);
+        setIsOpen(cities.length > 0);
       } catch (err) {
         console.error("Erreur lors de la recherche de ville :", err);
+        setSuggestions([]);
       }
     }, 300);
 
@@ -55,7 +48,7 @@ export default function SearchBar({ onSelectCity, onUseGeolocation }) {
           placeholder="Rechercher une ville..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          onFocus={() => query.length >= 2 && setIsOpen(true)}
+          onFocus={() => query.length >= 2 && suggestions.length > 0 && setIsOpen(true)}
         />
         <button 
           type="button" 
@@ -71,7 +64,7 @@ export default function SearchBar({ onSelectCity, onUseGeolocation }) {
         <ul className="suggestions-list">
           {suggestions.map((city, index) => (
             <li
-              key={index}
+              key={`${city.codePostal}-${index}`}
               className="suggestion-item"
               onClick={() => handleSelect(city)}
             >

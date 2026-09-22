@@ -4,7 +4,7 @@ import { FUELS } from '../constants/fuelMap';
 export default function FuelFilter({ selectedFuel, onSelectFuel }) {
   return (
     <div className="fuel-filter-container">
-      <span className="filter-title">Filtrer / Trier par :</span>
+      <span className="filter-title">Type de carburant :</span>
       <div className="fuel-buttons">
         {FUELS.map((fuel) => (
           <button
