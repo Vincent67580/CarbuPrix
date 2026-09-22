@@ -78,6 +78,7 @@ npm run build
 
 ## 📁 Structure du projet
 
+```text
 CarbuPrix/
 ├── src/
 │   ├── api/                 # Modules d'appels aux API externes (fuelApi, addressApi)
@@ -88,7 +89,7 @@ CarbuPrix/
 │   └── main.jsx             # Point d'entrée React
 ├── public/                  # Assets statiques
 └── package.json
-
+```
 ---
 
 ## 📄 Licence
