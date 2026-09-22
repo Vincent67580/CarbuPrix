@@ -83,6 +83,8 @@ CarbuPrix/
 ├── src/
 │   ├── api/                 # Modules d'appels aux API externes (fuelApi, addressApi)
 │   ├── components/          # Composants UI (StationCard, SearchBar, RadiusSelector, MapView...)
+│   ├── constants/           # Constantes globales (URLs, paramètres, configurations)
+│   ├── data/                # Données statiques ou fichiers locaux JSON
 │   ├── utils/               # Fonctions utilitaires (tri, calcul de distance, extraction GPS, navigation)
 │   ├── App.jsx              # Orchestrateur principal
 │   ├── App.css              # Feuille de style globale
