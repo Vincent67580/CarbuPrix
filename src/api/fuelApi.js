@@ -1,5 +1,7 @@
 /**
- * Récupère TOUTES les stations-service autour d'un point géographique (pagination automatique).
+ * Récupère TOUTES les stations-service autour d'un point géographique.
+ * Inclut la pagination automatique et la mise en cache (sessionStorage, TTL 15 min).
+ *
  * @param {number} lat - Latitude
  * @param {number} lon - Longitude
  * @param {number} radiusInMeters - Rayon de recherche en mètres
@@ -8,7 +10,27 @@
 export async function fetchStationsFromApi(lat, lon, radiusInMeters) {
   const latitude = Number(lat);
   const longitude = Number(lon);
-  const rows = 100; // Limite maximale par requête sur l'API v1
+
+  // Clé unique de cache basée sur la position (arrondie à ~1 km près) et le rayon
+  const cacheKey = `carbuprix_${latitude.toFixed(2)}_${longitude.toFixed(2)}_${radiusInMeters}`;
+  const TTL = 15 * 60 * 1000; // Durée de vie du cache : 15 minutes
+
+  // 1. Vérification de la présence des données dans le cache
+  try {
+    const cachedItem = sessionStorage.getItem(cacheKey);
+    if (cachedItem) {
+      const { timestamp, data } = JSON.parse(cachedItem);
+      if (Date.now() - timestamp < TTL) {
+        console.log(`[CarbuPrix] Cache : ${data.length} station(s) chargée(s) instantanément.`);
+        return data;
+      }
+    }
+  } catch (e) {
+    console.warn('[CarbuPrix] Erreur de lecture du cache :', e);
+  }
+
+  // 2. Récupération via l'API avec boucle de pagination si nécessaire
+  const rows = 100;
   let start = 0;
   let allRecords = [];
   let hasMore = true;
@@ -26,17 +48,33 @@ export async function fetchStationsFromApi(lat, lon, radiusInMeters) {
 
     allRecords = [...allRecords, ...records];
 
-    // On s'arrête si on a atteint le total (nhits) ou s'il n'y a plus de résultats
     if (allRecords.length >= (data.nhits || 0) || records.length < rows) {
       hasMore = false;
     } else {
-      start += rows; // On avance de 100 résultats pour la requête suivante
+      start += rows;
     }
   }
 
-  
-  return allRecords.map((record) => ({
+  console.log(`[CarbuPrix] API : ${allRecords.length} station(s) récupérée(s) au total dans un rayon de ${radiusInMeters / 1000} km.`);
+
+  // Formatage des données
+  const formattedStations = allRecords.map((record) => ({
     id: record.recordid,
     ...record.fields,
   }));
+
+  // 3. Sauvegarde des résultats formatés dans le cache
+  try {
+    sessionStorage.setItem(
+      cacheKey,
+      JSON.stringify({
+        timestamp: Date.now(),
+        data: formattedStations,
+      })
+    );
+  } catch (e) {
+    console.warn('[CarbuPrix] Impossible d\'écrire dans le cache :', e);
+  }
+
+  return formattedStations;
 }

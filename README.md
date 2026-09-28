@@ -16,6 +16,10 @@ Les données sont directement issues de l'API officielle OpenData du gouvernemen
   - Choix du rayon de recherche dynamique (5 km à 50 km).
   - Calcul de la distance exacte entre votre position et chaque station.
 
+- ⚡ **Performances & Cache :**
+  - **Pagination automatique :** Récupération de 100 % des stations de la zone sélectionnée (jusqu'à plusieurs centaines de stations sur un rayon de 50 km).
+  - **Mise en cache intelligente :** Stockage temporaire des résultats (`sessionStorage`, TTL 15 min) pour un affichage instantané et une réduction des requêtes API.
+
 - 💰 **Prix des carburants en temps réel :**
   - Affichage clair des prix (Gazole, SP95, SP98, E10, E85, GPLc).
   - Horodatage de la dernière mise à jour des prix transmise par la station.
@@ -30,8 +34,6 @@ Les données sont directement issues de l'API officielle OpenData du gouvernemen
 
 - ℹ️ **Informations détaillées sur la station :**
   - Enseigne et adresse complète.
-  <!-- - Services proposés (Automate 24/24, Laverie, Gonflage, Vente de gaz, DAB, etc.).
-  - Horaires d'ouverture détaillés jour par jour. -->
 
 ---
 
@@ -60,19 +62,27 @@ L'application est directement accessible depuis n'importe quel navigateur mobile
 - `npm`
 
 #### 1. Cloner le projet
-git clone https://github.com/vincent67580/CarbuPrix.git
+```bash
+git clone [https://github.com/vincent67580/CarbuPrix.git](https://github.com/vincent67580/CarbuPrix.git)
 cd CarbuPrix
+```
 
 #### 2. Installer les dépendances
+```bash
 npm install
+```
 
 #### 3. Lancer en mode développement
+```bash
 npm run dev
+```
 
 L'application sera accessible par défaut sur `http://localhost:5173`.
 
 #### 4. Build pour la production
+```bash
 npm run build
+```
 
 ---
 
@@ -92,6 +102,7 @@ CarbuPrix/
 ├── public/                  # Assets statiques
 └── package.json
 ```
+
 ---
 
 ## 📄 Licence
