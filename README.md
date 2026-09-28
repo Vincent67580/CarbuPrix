@@ -63,7 +63,7 @@ L'application est directement accessible depuis n'importe quel navigateur mobile
 
 #### 1. Cloner le projet
 ```bash
-git clone [https://github.com/vincent67580/CarbuPrix.git](https://github.com/vincent67580/CarbuPrix.git)
+git clone https://github.com/vincent67580/CarbuPrix.git
 cd CarbuPrix
 ```
 
