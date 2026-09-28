@@ -507,7 +507,6 @@ body {
   }
 
   .radius-selector {
-    justify-content: space-between;
     width: 100%;
     padding-top: 0.75rem;
     border-top: 1px solid var(--border-color);

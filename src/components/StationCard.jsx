@@ -10,8 +10,8 @@ export default function StationCard({ station, activeSortFuel, center }) {
   const stationTitle = getStationName(station);
   const { available, tempOutOfStock, defOutOfStock } = getFuelData(station);
 
-  const fullAddress = `${station.adresse || ''}${station.cp || station.ville ? `, ${station.cp || ''}${station.ville || ''}` : ''}`;
-
+  const fullAddress = `${station.adresse || ''}${station.cp || station.ville ? `, ${station.cp || ''} ${station.ville || ''}` : ''}`;
+  
   // Récupération des coordonnées pour la distance et le GPS
   // L'API OpenData retourne souvent [latitude, longitude] dans `geom`
   const lat = station.geom?.[0] || station.latitude;
