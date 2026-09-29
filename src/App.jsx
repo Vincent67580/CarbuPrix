@@ -1,14 +1,13 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import Header from './components/Header';
 import SearchBar from './components/SearchBar';
-import FuelFilter from './components/FuelFilter';
-import RadiusSelector from './components/RadiusSelector';
+import ControlsBar from './components/ControlsBar';
 import MapView from './components/MapView';
 import StationList from './components/StationList';
 import Footer from './components/Footer';
 
 import { fetchStationsFromApi } from './api/fuelApi';
-import { sortStationsByFuelPrice } from './utils/fuelUtils';
+import { sortStations } from './utils/fuelUtils';
 import './App.css';
 
 export default function App() {
@@ -17,6 +16,7 @@ export default function App() {
   const [error, setError] = useState(null);
   const [center, setCenter] = useState([48.8566, 2.3522]); // Paris par défaut
   const [selectedFuel, setSelectedFuel] = useState('all');
+  const [sortBy, setSortBy] = useState('price'); // 'price' ou 'distance'
   const [searchRadius, setSearchRadius] = useState(10000); // 10 km par défaut
 
   // Chargement des stations via le service API dédié
@@ -68,10 +68,10 @@ export default function App() {
     }
   };
 
-  // Stations triées calculées via l'utilitaire
+  // Stations triées et filtrées
   const sortedStations = useMemo(
-    () => sortStationsByFuelPrice(stations, selectedFuel),
-    [stations, selectedFuel]
+    () => sortStations(stations, selectedFuel, sortBy),
+    [stations, selectedFuel, sortBy]
   );
 
   return (
@@ -83,16 +83,15 @@ export default function App() {
         onUseGeolocation={handleGetUserLocation}
       />
 
-      <div className="controls-bar">
-        <FuelFilter
-          selectedFuel={selectedFuel}
-          onSelectFuel={setSelectedFuel}
-        />
-        <RadiusSelector
-          radius={searchRadius}
-          onChangeRadius={handleRadiusChange}
-        />
-      </div>
+      {/* Bar de controle et filtre */}
+      <ControlsBar
+        selectedFuel={selectedFuel}
+        onSelectFuel={setSelectedFuel}
+        sortBy={sortBy}
+        onSelectSort={setSortBy}
+        radius={searchRadius}
+        onChangeRadius={handleRadiusChange}
+      />
 
       {loading && <div className="status-message">Recherche des stations à proximité...</div>}
       {error && <div className="error-message">{error}</div>}

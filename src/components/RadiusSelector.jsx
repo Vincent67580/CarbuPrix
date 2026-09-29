@@ -12,7 +12,7 @@ export default function RadiusSelector({ radius, onChangeRadius }) {
   return (
     <div className="radius-selector">
       <label htmlFor="radius-select">
-        <strong>Rayon : </strong>
+         <span className="filter-title">Rayon : </span>
       </label>
       <select
         id="radius-select"
