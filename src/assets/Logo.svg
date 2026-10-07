@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <!-- Dégradé de fond principal -->
+    <linearGradient id="primaryGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563EB" />
+      <stop offset="100%" stop-color="#1D4ED8" />
+    </linearGradient>
+
+    <!-- Dégradé pistolet / icône -->
+    <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8" />
+      <stop offset="100%" stop-color="#0284C7" />
+    </linearGradient>
+
+    <!-- Dégradé bouton/élément actif -->
+    <linearGradient id="fuelDrop" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FACC15" />
+      <stop offset="100%" stop-color="#EAB308" />
+    </linearGradient>
+
+    <!-- Ombre portée douce -->
+    <filter id="dropShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#1E3A8A" flood-opacity="0.25" />
+    </filter>
+  </defs>
+
+  <!-- Fond SVG (Optionnel pour favicon ou icône d'application) -->
+  <rect width="512" height="512" rx="112" fill="url(#primaryGradient)" />
+
+  <g filter="url(#dropShadow)" transform="translate(0, -10)">
+    <!-- Pin de géolocalisation externe -->
+    <path d="M256 80 C167.6 80 96 151.6 96 240 C96 348 232 440 256 456 C280 440 416 348 416 240 C416 151.6 344.4 80 256 80 Z" 
+          fill="#FFFFFF" />
+
+    <!-- Cercle intérieur sombre pour découpe -->
+    <circle cx="256" cy="230" r="110" fill="#0F172A" />
+
+    <!-- Icône de Pistolet à Essence stylisé -->
+    <g transform="translate(186, 160)">
+      <!-- Corps de la pompe -->
+      <path d="M20 30 C20 18.95 28.95 10 40 10 L80 10 C91.05 10 100 18.95 100 30 L100 110 L20 110 Z" fill="url(#accentGradient)" />
+      
+      <!-- Écran du prix / compteur -->
+      <rect x="36" y="28" width="48" height="26" rx="6" fill="#0F172A" opacity="0.8" />
+      <rect x="42" y="36" width="20" height="4" rx="2" fill="#38BDF8" />
+      <rect x="66" y="36" width="12" height="4" rx="2" fill="#FACC15" />
+
+      <!-- Tuyau de la pompe -->
+      <path d="M100 45 C120 45 130 60 130 85 C130 110 120 125 100 125" 
+            stroke="#94A3B8" stroke-width="10" stroke-linecap="round" fill="none" />
+
+      <!-- Pistolet -->
+      <path d="M100 105 L115 105 L125 80 L115 80 Z" fill="#E2E8F0" />
+      <path d="M125 80 L140 60 L130 60 L118 76 Z" fill="#94A3B8" />
+
+      <!-- Goutte d'essence / Économie (Jaune/Or) -->
+      <path d="M60 68 C60 68 75 88 75 96 C75 104.28 68.28 111 60 111 C51.72 111 45 104.28 45 96 C45 88 60 68 60 68 Z" 
+            fill="url(#fuelDrop)" />
+    </g>
+  </g>
+</svg>
